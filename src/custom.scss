@@ -1,0 +1,21 @@
+@import '~bootstrap/scss/bootstrap.scss';
+
+
+.title {
+    font-size: large;
+    text-align : left;
+    color : goldenrod
+  }
+
+.mainBody {
+  // max-height: 68vh;
+  // overflow-y : scroll;
+
+}
+
+.searchbox{
+  width : 50%;
+  display: flex;
+  justify-items: left;
+  font-size: large;
+}
