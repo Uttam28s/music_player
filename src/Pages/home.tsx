@@ -3,9 +3,15 @@ import DiskImage from "../asset/disk.jpg";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { useDispatch } from "react-redux";
-import { addToFavourite, clearState, fetchPlayList } from "../store/playListReducer";
-import {useEffect, useState } from 'react'
-import type { AppDispatch } from '../store';
+import {
+  addToFavourite,
+  clearState,
+  fetchPlayList,
+} from "../store/playListReducer";
+import { useEffect, useState } from "react";
+import type { AppDispatch } from "../store";
+import HomeLayout from "../Component/HomeLayout";
+import { useKeycloak } from "@react-keycloak/web";
 
 const data2 = [
   {
@@ -42,47 +48,71 @@ const data2 = [
 
 const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3];
 const HomeSection = () => {
-  const [favourite, setFavourite] = useState([])
-  const [dataReccomad, setRecommandedData] = useState([])
+  const { keycloak } = useKeycloak();
+  const [favourite, setFavourite] = useState([]);
+  const [dataReccomad, setRecommandedData] = useState([]);
   const dispatch: AppDispatch = useDispatch();
-  const favouriteList = useSelector((state : RootState) => state.playList.favourite);
-  const list = useSelector((state : RootState) => state.playList.list);
+  const favouriteList = useSelector(
+    (state: RootState) => state.playList.favourite
+  );
+  const list = useSelector((state: RootState) => state.playList.list);
 
   useEffect(() => {
-      let data = localStorage.getItem('favourite_music')
-      // dispatch(fetchPlayList())
-      if(data){
-        setFavourite(JSON.parse(data))  
-      }
-
-  },[])
+    let data = localStorage.getItem("favourite_music");
+    // dispatch(fetchPlayList())
+    if (data) {
+      setFavourite(JSON.parse(data));
+    }
+  }, []);
 
   useEffect(() => {
-    setRecommandedData(list?.tracks)
-    console.log("🚀 ~ file: home.tsx:63 ~ useEffect ~ list:", list)
-  },[list])
+    setRecommandedData(list?.tracks);
+  }, [list]);
 
   return (
-    <section id="home" className="mx-5 my-3 mainBody">
-      <div className="d-flex justify-content-between">
-        <h3 className="title">User PlayList</h3>
-        <div className="d-flex w-100px">
-          <h6 className="mx-3">Prev</h6>
-          <h6>Next</h6>
+    <HomeLayout>
+      <section id="home" className="mx-5 my-3 mainBody">
+        <div className="d-flex justify-content-between">
+          <h3 className="title">User PlayList</h3>
+          <div className="d-flex w-100px">
+            <h6 className="mx-3">Prev</h6>
+            <h6>Next</h6>
+          </div>
         </div>
-      </div>
-      <div className="d-flex flex-wrap" style={{ marginLeft: "30px" }}>
-        {dataReccomad?.slice(0, 8).map((ele: any, index: any) => {
-          return <Card ele={ele} image={ele?.images?.background} name={ele?.title} />;
-        })}
-      </div>
-      <h3 className="my-5 title">User Favourite Music</h3>
-      <div className="d-flex" style={{ marginLeft: "30px" }}>
-        {favouriteList.map((ele: any) => {
-          return <Card ele={ele} image={ele?.artist?.avatar} name={ele?.artist?.name} />;
-        })}
-      </div>
-    </section>
+        <div className="d-flex flex-wrap" style={{ marginLeft: "30px" }}>
+          {dataReccomad?.slice(0, 8).map((ele: any, index: any) => {
+            return (
+              <Card
+                ele={ele}
+                image={ele?.images?.background}
+                name={ele?.title}
+              />
+            );
+          })}
+        </div>
+        <h3 className="my-5 title">User Favourite Music</h3>
+        <div className="d-flex" style={{ marginLeft: "30px" }}>
+          {favouriteList.map((ele: any) => {
+            return (
+              <Card
+                ele={ele}
+                image={ele?.artist?.avatar}
+                name={ele?.artist?.name}
+              />
+            );
+          })}
+        </div>
+        {keycloak && !keycloak.authenticated && (
+          <button
+            type="button"
+            className="text-blue-800"
+            onClick={() => keycloak.login()}
+          >
+            Login
+          </button>
+        )}
+      </section>
+    </HomeLayout>
   );
 };
 
