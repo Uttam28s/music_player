@@ -438,14 +438,15 @@ const trackData1 = [
 const SearchSection = () => {
   const [searchText, setSearchText] = useState("kiss the rain");
   const [data, setdata] = useState([]);
-  const [trackData, setTrackData] = useState(trackData1);
   const dispatch: AppDispatch = useDispatch();
   const searchResult = useSelector(
     (state: RootState) => state.playList.searchResult
   );
 
   useEffect(() => {
-    setdata(searchResult?.tracks?.hits);
+    if(searchResult?.tracks?.hits){
+      setdata(searchResult?.tracks?.hits);
+    }
   }, [dispatch, searchResult]);
 
   return (
@@ -467,9 +468,9 @@ const SearchSection = () => {
             Search
           </button>
         </div>
-        TrackData
+        Result
         <div className="d-flex flex-wrap">
-          {data?.map((ele: any) => {
+          {(data?.length === 0 ? trackData1:  data)?.map((ele: any) => {
             return (
               <Card
                 ele={ele}

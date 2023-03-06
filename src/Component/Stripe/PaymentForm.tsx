@@ -7,6 +7,9 @@ interface PaymentFormProps {
   onFailure: (error: Error) => void;
 }
 
+
+
+
 const PaymentForm: React.FC<PaymentFormProps> = ({ amount, onSuccess, onFailure }) => {
   const [processing, setProcessing] = useState(false);
   const stripe = useStripe();
@@ -41,11 +44,13 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ amount, onSuccess, onFailure 
       } else {
         // Send paymentMethod.id to your server to complete the payment
         // This is where you would use your server-side code to create a charge or subscription
+        setProcessing(false);
         onSuccess();
       }
     } catch (error:any) {
-      onFailure(error);
+      console.log("🚀 ~ file: PaymentForm.tsx:50 ~ handleSubmit ~ error:", error)
       setProcessing(false);
+      onFailure(error);
     }
   };
 
@@ -53,10 +58,10 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ amount, onSuccess, onFailure 
     <form onSubmit={handleSubmit}>
         <label htmlFor="card-element">Credit or debit card</label>
       <div className='d-flex my-4'>
-        <div className='border w-50 p-2'>
+        <div className='border border-dark rounded w-50 p-2'>
           <CardElement id="card-element" />
         </div>
-      <button type="submit"  disabled={processing} className="btn btn-outline-dark mx-4">{processing ? 'Processing...' : `Pay $${amount.toFixed(2)}`}</button>
+      <button type="submit"  disabled={processing} className="btn btn-dark mx-4">{processing ? 'Processing...' : `Pay $${amount.toFixed(2)}`}</button>
       </div>
     </form>
   );

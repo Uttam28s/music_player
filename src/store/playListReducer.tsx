@@ -48,8 +48,28 @@ export const playListSlice = createSlice({
         state.list = []
       },
     addToFavourite: (state, action: PayloadAction<any>) => {
-        state.favourite.push(action.payload)
+      let data = localStorage.getItem('favourite_music')
+      let list  =[]
+        if (data !== null) {
+         list  = JSON.parse(data)
+        } 
+        if(list.length === 0){
+          state.favourite.push(action.payload)
+        }
+        list?.map((ele : any) => {
+          if(ele?.track?.key !== action.payload?.track?.key){
+            state.favourite.push(action.payload)
+          }
+          return ''
+        })
         localStorage.setItem('favourite_music',JSON.stringify(state.favourite))
+    },
+    removefromFavourite: (state, action: PayloadAction<any>) => {
+        let items: string[] | null = JSON.parse(localStorage.getItem('favourite_music') || '[]');
+        if (items !== null) {
+          const updatedItems: string[] = items.filter((item: any) => item?.track?.key !== action.payload?.track?.key);
+          localStorage.setItem('favourite_music', JSON.stringify(updatedItems));
+         } 
     }
   },
   extraReducers: (builder) => {
@@ -70,6 +90,6 @@ export const playListSlice = createSlice({
 
 })
 
-export const { clearState, addToFavourite } = playListSlice.actions
+export const { clearState, addToFavourite, removefromFavourite } = playListSlice.actions
 
 export default playListSlice.reducer

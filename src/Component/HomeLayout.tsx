@@ -43,7 +43,7 @@ const HomeLayout: React.FunctionComponent<Props> = ({ children }) => {
         <div style={{ height: "20%" }}>
           <Header />
         </div>
-        <div style={{ height: "80%" }}>{children}</div>
+        <div style={{ height: "75%" }}>{children}</div>
       </div>
     </div>
   );

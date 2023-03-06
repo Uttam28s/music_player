@@ -26,7 +26,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 w-50">
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>

@@ -58,7 +58,7 @@ function App() {
                 </PrivateRoute>
               }
             />
-            <Route path="/login" element={<LoginPage />} />
+            <Route path="/" element={<LoginPage />} />
           </Routes>
         </Router>
       </Provider>
